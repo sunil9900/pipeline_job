@@ -1,0 +1,24 @@
+pipeline{
+    agent any
+    
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git 'https://github.com/sunil9900/pipeline_job.git'
+            }
+        }
+        stage("deploy-dev"){
+            steps{
+                sshagent(['deploy']) {
+                sh """
+                
+                ssh ec2-user@52.66.101.211 /home/ec2-user/tomcat/apache-tomcat-8.5.81/bin/shutdown.sh
+                scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/tomcat_deploy/index.html  ec2-user@52.66.101.211:/home/ec2-user/tomcat/apache-tomcat-8.5.81/webapps/app
+                ssh ec2-user@52.66.101.211 /home/ec2-user/tomcat/apache-tomcat-8.5.81/bin/startup.sh
+                
+                """
+            }
+            }
+        }
+    }
+}
