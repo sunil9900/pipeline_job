@@ -1,12 +1,7 @@
-FROM openjdk:8-jre-alpine
+FROM tomcat:8.0-alpine
 
-RUN wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.81/bin/apache-tomcat-8.5.81.tar.gz
-
-RUN gzip apache-tomcat-8.5.81.tar.gz
-
-RUN mkdir /apache-tomcat-8.5.81/webapps/sample_app
-ADD /var/lib /jenkins/workspace/pipeline_job/index.html /apache-tomcat-8.5.81/*/webapps/sample_app
-
+LABEL maintainer=”sunil reddy”
+RUN mkdir /usr/local/tomcat/webapps/sample_app
+ADD sample.war /usr/local/tomcat/webapps/sample_app
 EXPOSE 8080
-
-CMD ["catalina.sh", "run"]
+CMD [“catalina.sh”, “run”]
